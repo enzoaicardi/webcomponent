@@ -1,8 +1,8 @@
 {
     "name": "@enzoaicardi/webcomponent",
     "type": "module",
-    "version": "0.1.4",
-    "description": "A small modular interface for using signals in javascript",
+    "version": "0.0.1",
+    "description": "A customElements abstraction layer to create web components that can be rendered on both client and server sides",
     "homepage": "https://github.com/enzoaicardi/webcomponent",
     "bugs": "https://github.com/enzoaicardi/webcomponent/issues",
     "author": {
@@ -43,11 +43,12 @@
         }
     },
     "keywords": [
+        "typescript",
         "javascript",
-        "reactive",
-        "signal",
-        "state",
-        "es6"
+        "webcomponent",
+        "customElements",
+        "ssr",
+        "csr"
     ],
     "scripts": {
         "test": "echo \"No test specified\""
