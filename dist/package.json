@@ -1,0 +1,56 @@
+{
+    "name": "@enzoaicardi/webcomponent",
+    "type": "module",
+    "version": "0.1.4",
+    "description": "A small modular interface for using signals in javascript",
+    "homepage": "https://github.com/enzoaicardi/webcomponent",
+    "bugs": "https://github.com/enzoaicardi/webcomponent/issues",
+    "author": {
+        "name": "Enzo Aicardi",
+        "url": "https://enzo.aicardi.pro"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/enzoaicardi/webcomponent"
+    },
+    "main": "./esm/webcomponent.js",
+    "module": "./esm/webcomponent.js",
+    "browser": "./esm/webcomponent.js",
+    "types": "./index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./index.d.ts",
+            "require": "./cjs/webcomponent.cjs",
+            "import": "./esm/webcomponent.js",
+            "browser": "./esm/webcomponent.js",
+            "default": "./esm/webcomponent.js"
+        },
+        "./esm": {
+            "types": "./index.d.ts",
+            "default": "./esm/webcomponent.js"
+        },
+        "./cjs": {
+            "types": "./index.d.ts",
+            "default": "./cjs/webcomponent.cjs"
+        },
+        "./umd": {
+            "types": "./index.d.ts",
+            "default": "./umd/webcomponent.js"
+        },
+        "./iife": {
+            "types": "./index.d.ts",
+            "default": "./iife/webcomponent.js"
+        }
+    },
+    "keywords": [
+        "javascript",
+        "reactive",
+        "signal",
+        "state",
+        "es6"
+    ],
+    "scripts": {
+        "test": "echo \"No test specified\""
+    },
+    "license": "GPL-3.0-only"
+}
