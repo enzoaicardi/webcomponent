@@ -26,8 +26,6 @@ export default formats.map(function (format) {
                 mangle: {
                     properties: {
                         reserved: [
-                            "server",
-                            "client",
                             "tagName",
                             "define",
                             "connectedCallback",
