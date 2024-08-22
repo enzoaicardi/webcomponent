@@ -40,6 +40,8 @@ You want to try it ? Read the [documentation](https://github.com/enzoaicardi/web
 # List of all exports
 
 -   [x] [WebComponent](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
+-   [x] [isClient](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/env.md)
+-   [x] [isServer](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/env.md)
 
 # Installations
 
