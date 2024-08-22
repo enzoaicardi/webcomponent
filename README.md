@@ -14,20 +14,36 @@ _A customElements abstraction layer to create web components that can be rendere
 
 In pure javascript, web components are generally written using [custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) and possibly [shadow DOM](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM).
 
-This approach doesn't usually allow you to do without large javascript frameworks when you want to create an application based entirely on reusable components, and there are two main reasons for this:
+### Why we use (sometimes) frameworks
+
+The pure javascript approach doesn't usually allow you to do without **heavy javascript frameworks** when you want to create an application entirely based on reusable components, and there are two main reasons for this:
 
 -   Rendering nested components on the client side requires careful DOM manipulation.
 -   Server-side rendering of custom elements is impossible, as this is a browser API.
 
-The WebComponent utility was created to solve both these problems. It allows you to write code in the manner of a classic custom element, and distribute the code to both client and server.
+### Why js frameworks are (sometimes) a problem
 
-It is a minimal interface of less than **1kb** with no dependencies. To use it, read the [documentation](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md).
+There are many reasons why using javascript frameworks such as React, Vue, Svelte, Solid, etc. can be a problem, for example:
+
+-   **!important** : Most of the time frameworks take you out of the standard workflow understood by the browser, they have their own workflow (sometimes with their own language like jsx) which is then interpreted (or compiled) internally by being understood by the browser.
+-   Not all frameworks have server-side components
+-   You don't have full control over the life cycle of your component
+
+### How WebComponent layer can be usefull
+
+The **WebComponent** layer was created to solve these problems. It allows you to write code in the manner of a classic custom element with **pure javascript / typescript** (because it is just a layer), and distribute the code to both **client and server**.
+
+It is a minimal interface of less than **1kb** written in typescript with no dependencies.
+
+You want to try it ? Read the [documentation](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md).
 
 # List of all exports
 
 -   [x] [WebComponent](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
 
 # Installations
+
+The WebComponent layer is available as **ESModule / IIFE / Commonjs**.
 
 ## NPM Package
 

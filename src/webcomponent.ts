@@ -2,8 +2,17 @@ import { WebComponentConnector, isServer, templateElement } from "./utils";
 import { Symbols } from "./symbols";
 
 export class WebComponent extends WebComponentConnector {
+    /**
+     * <Client|Server> true if we are server side
+     * @type {boolean}
+     */
     server: boolean = isServer;
+    /**
+     * <Client|Server> true if we are client side
+     * @type {boolean}
+     */
     client: boolean = !isServer;
+
     /** @internal */
     [Symbols.args]: any[] = [];
     /** @internal */
@@ -24,17 +33,24 @@ export class WebComponent extends WebComponentConnector {
      */
     static define(definition: any) {
         // csr only
-        if (definition && !WebComponent[Symbols.defined].has(definition)) {
+        // executes only if the definition isn't already defined
+        if (
+            !isServer &&
+            !!definition &&
+            !WebComponent[Symbols.defined].has(definition)
+        ) {
+            // store definition as defined
             WebComponent[Symbols.defined].add(definition);
             const tagName = definition.tagName;
-            if (!isServer && tagName) {
+            // register the custom element in CustomElementsRegistry
+            if (tagName) {
                 customElements.define(tagName, definition);
             }
         }
     }
 
     /**
-     * <Client|Server> method used to obtain a WebComponent instance
+     * <Client|Server> method used to create a WebComponent instance
      * @param args arguments to pass to the WebComponent constructor
      * @returns {HTMLElement}
      */
