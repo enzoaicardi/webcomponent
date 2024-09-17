@@ -1,39 +1,53 @@
+import { WebComponent } from "./element";
+
 export const isServer: boolean = typeof document === "undefined";
 export const isClient: boolean = !isServer;
 
-interface AnonymousConstructor extends Function {
+interface AnonymousClass extends Function {
     new (): any;
     prototype: {};
 }
 
-export const WebComponentConnector: AnonymousConstructor | typeof HTMLElement =
-    isServer ? class {} : HTMLElement;
+export const SuperClass: AnonymousClass | typeof HTMLElement = isServer
+    ? class {}
+    : HTMLElement;
 
 /** @internal */
 export const templateElement: HTMLTemplateElement | null = isServer
     ? null
     : document.createElement("template");
 
-/**
- * TODO :
- * - html`` doit rendre une Promise<string>
- * - ce doit aussi etre le type de retour de render
- * - du coup connectedCallBack est asynchrone aussi = retourne une Promise<HTMLElement>
- *  - permet .then(component => ...)
- * - createElement doit quand à elle être synchrone car elle retourne juste le constructeur
- *  - puis [Symbol.toprimitive] doit être asynchrone et await le this.render
- * - cela devrait permettre une intégration sans effort des composants asynchrones
- */
+/** @internal */
+export const WebComponentRegistry = new Set<typeof WebComponent>();
 
-export async function createAsyncTemplateLiteral(
-    strings: TemplateStringsArray,
-    ...values: any[]
-): Promise<string> {
-    let result = "";
-    let i = 0;
-    for (; i < strings.length - 1; i++) {
-        let value = values[i] instanceof Promise ? await values[i] : values[i];
-        result += strings[i] + value;
+/** @internal */
+export const defineWebComponent = (definition: typeof WebComponent): void => {
+    if (isClient && !!definition && !WebComponentRegistry.has(definition)) {
+        WebComponentRegistry.add(definition);
+        customElements.define(definition.tagName, definition as any);
     }
-    return result + strings[i];
-}
+};
+
+/** @internal */
+export const createRawComponent = (
+    rawHTML: string,
+    tagName: string
+): string => {
+    if (tagName) {
+        return `<${tagName}>${rawHTML}</${tagName}>`;
+    }
+    // TODO send custom error "missing tagName"
+    throw new Error();
+};
+
+/** @internal */
+export const createFragmentComponent = (
+    rawHTML: string
+): DocumentFragment | null => {
+    if (templateElement) {
+        // append html to template element
+        templateElement.innerHTML = rawHTML;
+        return templateElement.content;
+    }
+    return null;
+};

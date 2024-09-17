@@ -1,5 +1,5 @@
 import { isClient, isServer } from "./webcomponent/utils";
-import { WebComponent } from "./webcomponent/class";
+import { WebComponent } from "./webcomponent/element";
 
 export {
     WebComponent as WebComponent,
