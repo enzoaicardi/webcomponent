@@ -9,6 +9,10 @@ interface AnonymousClass extends Function {
     prototype: {};
 }
 
+/**
+ * <Client> HTMLElement
+ * <Server> class {}
+ */
 export const SuperClass: AnonymousClass | typeof HTMLElement = isServer
     ? class {}
     : HTMLElement;
@@ -37,7 +41,7 @@ export const defineWebComponent = (definition: typeof WebComponent): void => {
 /** @internal */
 export const createRawComponent = (
     rawHTML: string,
-    tagName?: string
+    tagName: string
 ): string => {
     return `<${tagName}>${rawHTML}</${tagName}>`;
 };

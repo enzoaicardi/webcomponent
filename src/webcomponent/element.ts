@@ -90,7 +90,16 @@ export class WebComponent extends SuperClass {
         return Promise.resolve(self);
     }
 
+    /**
+     * <Client|Server> method used to define the content of a WebComponent
+     * @returns {string}
+     */
     render?(): string;
+
+    /**
+     * <Client|Server> method used to define the content of a WebComponent
+     * @returns {Promise<string>}
+     */
     renderAsync?(): Promise<string>;
 
     /**
@@ -119,7 +128,7 @@ export class WebComponent extends SuperClass {
     }
 
     /**
-     * <Client|Server> method used to return the string representation of the WebComponent
+     * <Client|Server> method used to return the primitive representation of the WebComponent
      * @returns {string}
      */
     [Symbol.toPrimitive](): string {
