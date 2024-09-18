@@ -1,3 +1,4 @@
+declare module "webcomponent/errors" { }
 declare module "webcomponent/symbols" { }
 declare module "webcomponent/element" {
     import { SuperClass } from "webcomponent/utils";
@@ -9,6 +10,18 @@ declare module "webcomponent/element" {
          * @param {WebComponent} definition WebComponent subclass definition
          */
         static define: (definition: typeof WebComponent) => void;
+        /**
+         * <Client|Server> method used to create a WebComponent instance
+         * @param args arguments to pass to the WebComponent constructor
+         * @returns {HTMLElement}
+         */
+        static createElement<T extends new (...args: any[]) => InstanceType<T>>(this: T, ...args: ConstructorParameters<T>): HTMLElement;
+        /**
+         * <Client|Server> shortcut used to create a WebComponent instance as string
+         * @param args arguments to pass to the WebComponent constructor
+         * @returns {string|Promise<string>}
+         */
+        static createRaw<T extends new (...args: any[]) => InstanceType<T>>(this: T, ...args: ConstructorParameters<T>): string | Promise<string>;
         /**
          * <Client|Server> constructor method used to create a WebComponent instance
          */

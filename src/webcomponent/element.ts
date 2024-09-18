@@ -1,10 +1,10 @@
+import { PropertyRequiredError } from "./errors";
 import { Symbols } from "./symbols";
 import {
     SuperClass,
     createFragmentComponent,
     createRawComponent,
     defineWebComponent,
-    isClient,
 } from "./utils";
 
 export class WebComponent extends SuperClass {
@@ -16,6 +16,32 @@ export class WebComponent extends SuperClass {
      * @param {WebComponent} definition WebComponent subclass definition
      */
     static define = defineWebComponent;
+
+    /**
+     * <Client|Server> method used to create a WebComponent instance
+     * @param args arguments to pass to the WebComponent constructor
+     * @returns {HTMLElement}
+     */
+    static createElement<T extends new (...args: any[]) => InstanceType<T>>(
+        this: T,
+        ...args: ConstructorParameters<T>
+    ): HTMLElement {
+        defineWebComponent(this as unknown as typeof WebComponent);
+        return new this(...args) as unknown as HTMLElement;
+    }
+
+    /**
+     * <Client|Server> shortcut used to create a WebComponent instance as string
+     * @param args arguments to pass to the WebComponent constructor
+     * @returns {string|Promise<string>}
+     */
+    static createRaw<T extends new (...args: any[]) => InstanceType<T>>(
+        this: T,
+        ...args: ConstructorParameters<T>
+    ): string | Promise<string> {
+        defineWebComponent(this as unknown as typeof WebComponent);
+        return (new this(...args) as WebComponent).toString();
+    }
 
     /** @internal */
     [Symbols.definition]: typeof WebComponent =
@@ -34,10 +60,6 @@ export class WebComponent extends SuperClass {
      */
     constructor() {
         super();
-        if (isClient) {
-            // define the WebComponent subclass to prevent "Illegal constructor" errors
-            defineWebComponent(this[Symbols.definition]);
-        }
     }
 
     /**
@@ -76,20 +98,24 @@ export class WebComponent extends SuperClass {
      * @returns {string|Promise<string>}
      */
     toString(): string | Promise<string> {
-        const tagName = this[Symbols.definition]["tagName"];
+        const definition = this[Symbols.definition];
+        const tagName = definition.tagName;
 
-        // sync -> string
-        if (this.render) {
-            return createRawComponent(this.render(), tagName);
+        if (tagName) {
+            // sync -> string
+            if (this.render) {
+                return createRawComponent(this.render(), tagName);
+            }
+            // async -> Promise<string>
+            else if (this.renderAsync) {
+                return this.renderAsync().then((rawHTML) =>
+                    createRawComponent(rawHTML, tagName)
+                );
+            }
+        } else {
+            throw new PropertyRequiredError("static tagName", definition);
         }
-        // async -> Promise<string>
-        else if (this.renderAsync) {
-            return this.renderAsync().then((rawHTML) =>
-                createRawComponent(rawHTML, tagName)
-            );
-        }
-        // TODO throw custom error : "missing render method on component"
-        throw new Error();
+        throw new PropertyRequiredError("render | renderAsync", definition);
     }
 
     /**
@@ -103,7 +129,6 @@ export class WebComponent extends SuperClass {
                 this[Symbols.definition]["tagName"]
             );
         }
-        // TODO throw custom error : "missing render method on component"
-        throw new Error();
+        throw new PropertyRequiredError("render", this[Symbols.definition]);
     }
 }

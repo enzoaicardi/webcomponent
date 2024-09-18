@@ -1,15 +1,16 @@
 import { WebComponent } from "./element";
 
+/** @internal */
 class WebComponentError extends Error {
     constructor(message: string) {
         super(message);
-        this.name = "WebComponentError";
     }
 }
 
+/** @internal */
 export class PropertyRequiredError extends WebComponentError {
-    constructor(property: string, component: WebComponent) {
-        super(`Missing property ${property} on ${component.constructor.name}`);
+    constructor(property: string, component: typeof WebComponent) {
+        super(`Missing property ${property} on ${component.name}`);
         this.name = "PropertyRequiredError";
     }
 }

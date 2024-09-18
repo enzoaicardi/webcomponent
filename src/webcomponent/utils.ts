@@ -1,4 +1,5 @@
 import { WebComponent } from "./element";
+import { PropertyRequiredError } from "./errors";
 
 export const isServer: boolean = typeof document === "undefined";
 export const isClient: boolean = !isServer;
@@ -22,22 +23,23 @@ export const WebComponentRegistry = new Set<typeof WebComponent>();
 
 /** @internal */
 export const defineWebComponent = (definition: typeof WebComponent): void => {
-    if (isClient && !!definition && !WebComponentRegistry.has(definition)) {
-        WebComponentRegistry.add(definition);
-        customElements.define(definition.tagName, definition as any);
+    if (isClient && !!definition) {
+        if (definition.tagName) {
+            if (!WebComponentRegistry.has(definition)) {
+                WebComponentRegistry.add(definition);
+                customElements.define(definition.tagName, definition as any);
+            }
+        }
+        throw new PropertyRequiredError("static tagName", definition);
     }
 };
 
 /** @internal */
 export const createRawComponent = (
     rawHTML: string,
-    tagName: string
+    tagName?: string
 ): string => {
-    if (tagName) {
-        return `<${tagName}>${rawHTML}</${tagName}>`;
-    }
-    // TODO send custom error "missing tagName"
-    throw new Error();
+    return `<${tagName}>${rawHTML}</${tagName}>`;
 };
 
 /** @internal */
