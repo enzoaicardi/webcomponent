@@ -5,7 +5,7 @@ const formats = ["iife", "esm", "cjs", "umd"];
 
 export default formats.map(function (format) {
     return {
-        input: "src/webcomponent.ts",
+        input: "src/@enzoaicardi/webcomponent.ts",
         output: {
             file: `dist/${format}/webcomponent.${
                 format === "cjs" ? "cjs" : "js"

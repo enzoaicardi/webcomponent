@@ -1,11 +1,15 @@
 {
+    "name": "@enzoaicardi/pendingliteral",
     "type": "module",
+    "types": "dist/index.d.ts",
     "scripts": {
         "build": "rollup --config rollup.config.js && tsc --project tsconfig.d.json",
         "dev": "rollup --config rollup.config.js --watch",
         "declare": "tsc --project tsconfig.d.json"
     },
     "devDependencies": {
+        "@enzoaicardi/pendingliteral": "^1.0.0",
+        "@enzoaicardi/reactivity": "^0.1.4",
         "@rollup/plugin-terser": "^0.4.4",
         "@rollup/plugin-typescript": "^11.1.6",
         "rollup": "^4.18.1",
