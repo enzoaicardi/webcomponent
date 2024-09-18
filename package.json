@@ -1,7 +1,5 @@
 {
-    "name": "@enzoaicardi/pendingliteral",
     "type": "module",
-    "types": "dist/index.d.ts",
     "scripts": {
         "build": "rollup --config rollup.config.js && tsc --project tsconfig.d.json",
         "dev": "rollup --config rollup.config.js --watch",
