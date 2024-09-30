@@ -8,38 +8,25 @@ _A customElements abstraction layer to create web components that can be rendere
 [![JSDelivr Hits](https://img.shields.io/jsdelivr/npm/hm/@enzoaicardi/webcomponent?style=for-the-badge)](https://www.jsdelivr.com/package/npm/@enzoaicardi/webcomponent)
 [![Wiki](https://img.shields.io/badge/Wiki-Documentation-blue?style=for-the-badge)](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
 
-# What is a WebComponent
+# What is a web-component
 
 > _Web Components is a suite of different technologies allowing you to create reusable custom elements — with their functionality encapsulated away from the rest of your code — and utilize them in your web apps._ (source: [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_components))
 
 In pure javascript, web components are generally written using [custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) and possibly [shadow DOM](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM).
 
-### Why we use (sometimes) frameworks
+# Why WebComponent ?
 
-The pure javascript approach doesn't usually allow you to do without **heavy javascript frameworks** when you want to create an application entirely based on reusable components, and there are two main reasons for this:
+Web-components are part of the user interface. They provide lifecycle methods once instantiated, but have no rendering method that can be executed on both client and server.
 
--   Rendering nested components on the client side requires careful DOM manipulation.
--   Server-side rendering of custom elements is impossible, as this is a browser API.
+The WebComponent library is designed to solve these problems. Unlike most reactive component frameworks / libraries, WebComponent is just a small layer on top of customElements written in typescript (only 1.3kb) that doesn't take you out of the scope of traditional javascript development, doesn't use JSX, and doesn't require a transpiler.
 
-### Why js frameworks are (sometimes) a problem
-
-There are many reasons why using javascript frameworks such as React, Vue, Svelte, Solid, etc. can be a problem, for example:
-
--   **!important** : Most of the time frameworks take you out of the standard workflow understood by the browser, they have their own workflow (sometimes with their own language like jsx) which is then interpreted (or compiled) internally by being understood by the browser.
--   Not all frameworks have server-side components
--   You don't have full control over the life cycle of your component
-
-### How WebComponent layer can be usefull
-
-The **WebComponent** layer was created to solve these problems. It allows you to write code in the manner of a classic custom element with **pure javascript / typescript** (because it is just a layer), and distribute the code to both **client and server**.
-
-It is a minimal interface of less than **1kb** written in typescript with no dependencies.
-
-You want to try it ? Read the [documentation](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md).
+To learn how to use it, [check the wiki](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md) !
 
 # List of all exports
 
 -   [x] [WebComponent](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
+-   [x] [isClient](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/env.md)
+-   [x] [isServer](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/env.md)
 
 # Installations
 
