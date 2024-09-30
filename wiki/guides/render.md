@@ -96,3 +96,9 @@ In general, for rendering asynchronous components I recommend the [pendinglitera
 For syntax highlighting there are VSCode extensions like [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) which allow this by preceding your string with `/* html */`.
 
 I don't recommend using a [tag function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates) in synchronous components for syntax highlighting because they are less performant than native template literals.
+
+---
+
+# Next
+
+[Manage states and reactivity](./guides/reactivity.md)
