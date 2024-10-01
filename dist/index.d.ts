@@ -22,6 +22,8 @@ declare module "@enzoaicardi/webcomponent/element" {
          * @returns {string|Promise<string>}
          */
         static createRaw<T extends new (...args: any[]) => InstanceType<T>>(this: T, ...args: ConstructorParameters<T>): string | Promise<string>;
+        /** @type {Object<string, string> | undefined} <Client|Server> the element attributes */
+        properties: Record<string, string> | undefined;
         /**
          * <Client|Server> constructor method used to create a WebComponent instance
          */

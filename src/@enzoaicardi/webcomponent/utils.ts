@@ -33,17 +33,25 @@ export const defineWebComponent = (definition: typeof WebComponent): void => {
                 WebComponentRegistry.add(definition);
                 customElements.define(definition.tagName, definition as any);
             }
+        } else {
+            throw new PropertyRequiredError("static tagName", definition);
         }
-        throw new PropertyRequiredError("static tagName", definition);
     }
 };
 
 /** @internal */
 export const createRawComponent = (
     rawHTML: string,
-    tagName: string
+    tagName: string,
+    properties: Record<string, string> | undefined
 ): string => {
-    return `<${tagName}>${rawHTML}</${tagName}>`;
+    const attributes = properties
+        ? Object.entries(properties).reduce(
+              (acc, [key, value]) => acc + ` ${key}="${value}"`,
+              ""
+          )
+        : "";
+    return `<${tagName}${attributes}>${rawHTML}</${tagName}>`;
 };
 
 /** @internal */

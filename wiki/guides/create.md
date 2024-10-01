@@ -19,6 +19,8 @@ Now we've created a customElement that displays “hello world!” in the browse
 
 To make this component a WebComponent, we simply replace the parent class `HTMLElement` and the `customElements` keyword with `WebComponent`. We also need to add the `tagName` as a static class property, and we can remove it from the definition.
 
+If you eventually want to add attributes to your component, simply define them in the `this.properties` property.
+
 ```js
 import { WebComponent } from "@enzoaicardi/webcomponent";
 
@@ -27,6 +29,11 @@ class MyComponent extends WebComponent {
 
     constructor() {
         super();
+        // define attributes here (optional)
+        this.properties = {
+            class: "my-component-class",
+            "data-name": "some data attribute",
+        };
     }
     connectedCallback() {
         console.log("hello world !");

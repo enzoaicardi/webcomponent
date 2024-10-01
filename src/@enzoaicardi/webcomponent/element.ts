@@ -43,15 +43,27 @@ export class WebComponent extends SuperClass {
         return (new this(...args) as WebComponent).toString();
     }
 
+    /** @type {Object<string, string> | undefined} <Client|Server> the element attributes */
+    properties: Record<string, string> | undefined;
+
     /** @internal */
     [Symbols.definition]: typeof WebComponent =
         Object.getPrototypeOf(this).constructor;
 
     /** @internal */
     [Symbols.populate](rawHTML: string) {
+        const self = this as unknown as HTMLElement;
         const fragment = createFragmentComponent(rawHTML);
+        const properties = this.properties;
+        // set component attributes
+        if (properties) {
+            for (const key in properties) {
+                self.setAttribute(key, properties[key]);
+            }
+        }
+        // set component childNodes
         if (fragment) {
-            (this as unknown as HTMLElement).appendChild(fragment);
+            self.appendChild(fragment);
         }
     }
 
@@ -107,18 +119,19 @@ export class WebComponent extends SuperClass {
      * @returns {string|Promise<string>}
      */
     toString(): string | Promise<string> {
+        const properties = this.properties;
         const definition = this[Symbols.definition];
         const tagName = definition.tagName;
 
         if (tagName) {
             // sync -> string
             if (this.render) {
-                return createRawComponent(this.render(), tagName);
+                return createRawComponent(this.render(), tagName, properties);
             }
             // async -> Promise<string>
             else if (this.renderAsync) {
                 return this.renderAsync().then((rawHTML) =>
-                    createRawComponent(rawHTML, tagName)
+                    createRawComponent(rawHTML, tagName, properties)
                 );
             }
         } else {
@@ -135,7 +148,8 @@ export class WebComponent extends SuperClass {
         if (this.render) {
             return createRawComponent(
                 this.render(),
-                this[Symbols.definition]["tagName"]
+                this[Symbols.definition]["tagName"],
+                this.properties
             );
         }
         throw new PropertyRequiredError("render", this[Symbols.definition]);

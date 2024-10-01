@@ -28,6 +28,7 @@ export default formats.map(function (format) {
                         reserved: [
                             "tagName",
                             "define",
+                            "properties",
                             "connectedCallback",
                             "render",
                             "renderAsync",
