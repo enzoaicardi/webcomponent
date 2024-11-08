@@ -57,8 +57,16 @@ declare module "@enzoaicardi/webcomponent/element" {
     }
 }
 declare module "@enzoaicardi/webcomponent/utils" {
+    /** <Client|Server> constant indicating the execution environment */
     export const isServer: boolean;
+    /** <Client|Server> constant indicating the execution environment */
     export const isClient: boolean;
+    /**
+     * <Client|Server> function used to escape HTML special characters
+     * @param {string} text the text to be sanitized
+     * @returns {string} the sanitized text
+     */
+    export const sanitize: (text: string) => string;
     interface AnonymousClass extends Function {
         new (): any;
         prototype: {};
@@ -70,7 +78,7 @@ declare module "@enzoaicardi/webcomponent/utils" {
     export const SuperClass: AnonymousClass | typeof HTMLElement;
 }
 declare module "@enzoaicardi/webcomponent" {
-    import { isClient, isServer } from "@enzoaicardi/webcomponent/utils";
+    import { isClient, isServer, sanitize } from "@enzoaicardi/webcomponent/utils";
     import { WebComponent } from "@enzoaicardi/webcomponent/element";
-    export { WebComponent as WebComponent, isClient as isClient, isServer as isServer, };
+    export { WebComponent as WebComponent, sanitize as sanitize, isServer as isServer, isClient as isClient, };
 }
