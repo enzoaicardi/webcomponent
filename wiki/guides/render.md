@@ -5,6 +5,8 @@ In this section we'll take a look at the `render` and `renderAsync` rendering me
 The first thing to know is that these two methods must be implemented by the developer. Their purpose is to return a string (or a Promise that turns into string) in HTML format.
 
 ```js
+import { WebComponent, sanitize } from "@enzoaicardi/webcomponent";
+
 class MyComponent extends WebComponent {
     static tagName = "my-component";
 
@@ -13,7 +15,7 @@ class MyComponent extends WebComponent {
         this.what = what;
     }
     render() {
-        return `<p>This is ${this.what}</p>`;
+        return `<p>This is ${sanitize(this.what)}</p>`;
     }
 }
 ```

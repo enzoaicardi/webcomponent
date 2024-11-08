@@ -25,6 +25,7 @@ To learn how to use it, [check the wiki](https://github.com/enzoaicardi/webcompo
 # List of all exports
 
 -   [x] [WebComponent](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
+-   [x] [sanitize](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/sanitize.md)
 -   [x] [isClient](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/env.md)
 -   [x] [isServer](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/env.md)
 
