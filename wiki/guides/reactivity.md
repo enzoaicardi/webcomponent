@@ -6,4 +6,4 @@ To manage states and reactivity i recommend you to use the [reactivity](https://
 
 # Next
 
-Done for the moment... [Back to home](../README.md)
+[Escape HTML special characters](../utilities/sanitize.md)

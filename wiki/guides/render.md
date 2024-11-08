@@ -103,4 +103,4 @@ I don't recommend using a [tag function](https://developer.mozilla.org/en-US/doc
 
 # Next
 
-[Manage states and reactivity](./guides/reactivity.md)
+[Manage states and reactivity](./reactivity.md)
