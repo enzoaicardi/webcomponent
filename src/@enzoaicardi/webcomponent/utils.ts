@@ -1,8 +1,35 @@
 import { WebComponent } from "./element";
 import { PropertyRequiredError } from "./errors";
 
+/** <Client|Server> constant indicating the execution environment */
 export const isServer: boolean = typeof document === "undefined";
+/** <Client|Server> constant indicating the execution environment */
 export const isClient: boolean = !isServer;
+
+/** @internal */
+const HTMLRegex = /[&<>"'`]/g;
+
+/** @internal */
+const HTMLTable = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+    "`": "&#96;",
+};
+
+/** @internal */
+const HTMLMatchTable = (match: string): string => HTMLTable[match];
+
+/**
+ * <Client|Server> function used to escape HTML special characters
+ * @param {string} text the text to be sanitized
+ * @returns {string} the sanitized text
+ */
+export const sanitize = (text: string): string => {
+    return text.replace(HTMLRegex, HTMLMatchTable);
+};
 
 interface AnonymousClass extends Function {
     new (): any;
@@ -47,7 +74,9 @@ export const createRawComponent = (
 ): string => {
     const attributes = properties
         ? Object.entries(properties).reduce(
-              (acc, [key, value]) => acc + ` ${key}="${value}"`,
+              (acc, [key, value]) =>
+                  acc +
+                  (/[^:.\w_-]/.test(key) ? "" : ` ${key}="${sanitize(value)}"`),
               ""
           )
         : "";
