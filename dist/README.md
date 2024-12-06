@@ -18,15 +18,14 @@ In pure javascript, web components are generally written using [custom elements]
 
 Web-components are part of the user interface. They provide lifecycle methods once instantiated, but have no rendering method that can be executed on both client and server.
 
-The WebComponent library is designed to solve these problems. Unlike most reactive component frameworks / libraries, WebComponent is just a small layer on top of customElements written in typescript (only 1.3kb) that doesn't take you out of the scope of traditional javascript development, doesn't use JSX, and doesn't require a transpiler.
+The WebComponent library is designed to solve these problems. Unlike most reactive component frameworks / libraries, WebComponent is just a small layer on top of customElements written in typescript (only 1.7kb) that doesn't take you out of the scope of traditional javascript development, doesn't use JSX, and doesn't require a transpiler.
 
 To learn how to use it, [check the wiki](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md) !
 
 # List of all exports
 
--   [x] [WebComponent](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
--   [x] [isClient](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/env.md)
--   [x] [isServer](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/utilities/env.md)
+-   [x] [client](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
+-   [x] [server](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
 
 # Installations
 
@@ -39,22 +38,23 @@ npm install @enzoaicardi/webcomponent
 ```
 
 ```js
-import { WebComponent } from "@enzoaicardi/webcomponent"; // es modules
-const { WebComponent } = require("@enzoaicardi/webcomponent"); // commonjs modules
+import * as WebComponent from "@enzoaicardi/webcomponent"; // es modules
+const WebComponent = require("@enzoaicardi/webcomponent"); // commonjs modules
 ```
 
 ## CDN import
 
 ```js
 // es modules
-import { WebComponent } from "https://cdn.jsdelivr.net/npm/@enzoaicardi/webcomponent@latest/esm/webcomponent.js";
+import * as WebComponent from "https://cdn.jsdelivr.net/npm/@enzoaicardi/webcomponent@latest/esm/webcomponent.js";
 ```
 
 ```html
 <!-- iife function execution -->
 <script src="https://cdn.jsdelivr.net/npm/@enzoaicardi/webcomponent@latest/iife/webcomponent.js"></script>
 <script>
-    // global object destructuration
-    const { WebComponent } = WebComponent;
+    // global object
+    WebComponent.client;
+    WebComponent.server;
 </script>
 ```
