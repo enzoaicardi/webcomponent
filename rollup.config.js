@@ -28,12 +28,10 @@ export default formats.map(function (format) {
                         reserved: [
                             "tagName",
                             "define",
-                            "properties",
+                            "attrs",
                             "connectedCallback",
                             "render",
                             "renderAsync",
-                            "createElement",
-                            "createRaw",
                             "toString",
                         ],
                     },

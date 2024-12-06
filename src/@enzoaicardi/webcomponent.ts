@@ -1,9 +1,4 @@
-import { isClient, isServer, sanitize } from "./webcomponent/utils";
-import { WebComponent } from "./webcomponent/element";
+import { ClientWebComponent } from "./webcomponent/client";
+import { ServerWebComponent } from "./webcomponent/server";
 
-export {
-    WebComponent as WebComponent,
-    sanitize as sanitize,
-    isServer as isServer,
-    isClient as isClient,
-};
+export { ClientWebComponent as client, ServerWebComponent as server };

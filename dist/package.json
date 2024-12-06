@@ -1,7 +1,7 @@
 {
     "name": "@enzoaicardi/webcomponent",
     "type": "module",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "A customElements abstraction layer to create web components that can be rendered on both client and server sides",
     "homepage": "https://github.com/enzoaicardi/webcomponent",
     "bugs": "https://github.com/enzoaicardi/webcomponent/issues",

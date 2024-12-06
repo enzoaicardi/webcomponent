@@ -1,16 +1,34 @@
-import { WebComponent } from "./element";
+import { ClientWebComponent } from "./client";
+import { ServerWebComponent } from "./server";
+
+type WebComponentConstructor =
+    | typeof ClientWebComponent
+    | typeof ServerWebComponent;
 
 /** @internal */
-class WebComponentError extends Error {
-    constructor(message: string) {
-        super(message);
+export class MissingTagName extends Error {
+    constructor(definition: WebComponentConstructor) {
+        super(`[${definition.name}] Missing static property tagName.`);
+        this.name = "MissingTagName";
     }
 }
 
 /** @internal */
-export class PropertyRequiredError extends WebComponentError {
-    constructor(property: string, component: typeof WebComponent) {
-        super(`Missing property ${property} on ${component.name}`);
-        this.name = "PropertyRequiredError";
+export class MissingRenderingMethod extends Error {
+    constructor(definition: WebComponentConstructor) {
+        super(
+            `[${definition.name} ${definition.tagName}] Cannot render component without rendering method (render | renderAsync).`
+        );
+        this.name = "MissingRenderingMethod";
+    }
+}
+
+/** @internal */
+export class UnauthorizedCoercion extends Error {
+    constructor(definition: WebComponentConstructor) {
+        super(
+            `[${definition.name} ${definition.tagName}] Unauthorized implicit coercion without synchronous rendering. Use toString instead.`
+        );
+        this.name = "UnauthorizedCoercion";
     }
 }
