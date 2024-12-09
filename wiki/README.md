@@ -39,9 +39,10 @@ class client extends WebComponent.client {
         super(client);
     }
 
-    async connectedCallback() {
-        /* only for client-side rendering */
-        // await super.connectedCallback();
+    connectedCallback() {
+        /* in case of client-side rendering */
+        super.connectedCallback();
+        /* --- */
         this.querySelector("button").setAttribute("disabled", true);
     }
 }

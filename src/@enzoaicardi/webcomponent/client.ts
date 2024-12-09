@@ -70,9 +70,9 @@ export class ClientWebComponent extends HTMLElement {
     /**
      * Native custom element connectedCallback method
      * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements|MDN}
-     * @returns {Promise<ClientWebComponent>}
+     * @returns {Promise<void>|void}
      */
-    async connectedCallback(): Promise<void> {
+    connectedCallback(): Promise<void> | void {
         // if the WebComponent is empty
         if (!this.childNodes.length) {
             // sync -> populate
@@ -81,8 +81,9 @@ export class ClientWebComponent extends HTMLElement {
             }
             // async -> Promise -> populate
             else if (this.renderAsync) {
-                const raw = await this.renderAsync();
-                this[Symbols.populate](raw);
+                return this.renderAsync().then((raw) =>
+                    this[Symbols.populate](raw)
+                );
             }
         }
     }
