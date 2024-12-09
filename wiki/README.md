@@ -4,7 +4,7 @@ The WebComponent library is designed to be both client- and server-side compatib
 
 It contains only static declarations, enabling code to be isolated when bundled with tools such as rollup.
 
-It's an unopinionated library which leaves you free to choose how you want to manage responsiveness, user input processing, or even the architecture of your web server.
+It's an unopinionated library which leaves you free to choose how you want to manage reactivity, user inputs, and even the architecture of your web server.
 
 ## How to create a WebComponent ?
 
@@ -71,7 +71,7 @@ Now here are the methods you'll find only in client components :
 
 As explained earlier it is an unopinionated library which leaves you free to choose how you want to manage your components.
 
-But if we assume that you want both server-side rendering and client-side responsiveness, you could have three separate files:
+But if we assume that you want both server-side rendering and client-side reactivity, you could have three separate files:
 
 -   `client-bundle.ts`
 -   `server-bundle.ts`
@@ -80,7 +80,6 @@ But if we assume that you want both server-side rendering and client-side respon
 ```ts
 // client-bundle.ts
 import { client as Button } from "./components/my-component.ts";
-
 Button.define();
 ```
 
@@ -91,20 +90,20 @@ import { server as Button } from "./components/my-component.ts";
 // routing etc...
 app.get("/", (req, res) => {
     res.send(`
-    <html>
-        <body>
-            ${new Button("Hello world").toString()}
-        </body>
-    </html>
-  `);
+        <html>
+            <body>
+                ${new Button("Hello world").toString()}
+            </body>
+        </html>
+    `);
 });
 ```
 
 ## Additional features
 
-If you're rendering on the server side, you'll certainly need to ensure that your user inputs are risk-free to avoid security problems. On the client side, you'll certainly want to manage responsiveness. But you may also want to manage asynchronous rendering of components.
+If you're rendering on the server side, you'll certainly need to ensure that your user inputs are risk-free to avoid security problems. On the client side, you'll certainly want to manage reactivity. But you may also want to manage asynchronous rendering of components.
 
-For these specific needs, you are free to choose the bookshop that best meets your requirements.
+For these specific needs, you are free to choose the best library for your requirements.
 
 I've created several packages to meet these different needs, all of which can be used with or without the WebComponents library:
 
