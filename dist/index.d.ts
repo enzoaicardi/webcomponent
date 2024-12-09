@@ -51,9 +51,9 @@ declare class ClientWebComponent extends HTMLElement {
 	/**
 	 * Native custom element connectedCallback method
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements|MDN}
-	 * @returns {Promise<ClientWebComponent>}
+	 * @returns {Promise<void>|void}
 	 */
-	connectedCallback(): Promise<void>;
+	connectedCallback(): Promise<void> | void;
 	/**
 	 * Method used to define the content of a WebComponent
 	 * @returns {string}
