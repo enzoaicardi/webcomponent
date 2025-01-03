@@ -31,8 +31,8 @@ declare class ServerWebComponent {
 	[Symbol.toPrimitive]: typeof toPrimitiveComponent;
 }
 export type WebComponent = ClientWebComponent | ServerWebComponent;
-declare function createRawComponent<T extends WebComponent>(this: T): string | Promise<string>;
-declare function toPrimitiveComponent<T extends WebComponent>(this: T): string;
+declare function createRawComponent<T extends WebComponent>(this: T): T extends Required<Pick<T, "render">> ? string : T extends Required<Pick<T, "renderAsync">> ? Promise<string> : never;
+declare function toPrimitiveComponent<T extends WebComponent>(this: T): T extends Required<Pick<T, "render">> ? string : never;
 export type ClientWebComponentConstructor = Required<typeof ClientWebComponent> & CustomElementConstructor;
 declare class ClientWebComponent extends HTMLElement {
 	/** @type {string} The element <tag-name> */
