@@ -24,8 +24,7 @@ To learn how to use it, [check the wiki](https://github.com/enzoaicardi/webcompo
 
 # List of all exports
 
--   [x] [client](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
--   [x] [server](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
+-   [x] [WebComponent](https://github.com/enzoaicardi/webcomponent/tree/main/wiki/README.md)
 
 # Installations
 
@@ -38,23 +37,27 @@ npm install @enzoaicardi/webcomponent
 ```
 
 ```js
-import * as WebComponent from "@enzoaicardi/webcomponent"; // es modules
-const WebComponent = require("@enzoaicardi/webcomponent"); // commonjs modules
+import { WebComponent } from "@enzoaicardi/webcomponent/client"; // client es module
+import { WebComponent } from "@enzoaicardi/webcomponent/server"; // server es module
+
+const WebComponent = require("@enzoaicardi/webcomponent/client"); // client commonjs modules
+const WebComponent = require("@enzoaicardi/webcomponent/server"); // server commonjs modules
 ```
 
 ## CDN import
 
 ```js
-// es modules
-import * as WebComponent from "https://cdn.jsdelivr.net/npm/@enzoaicardi/webcomponent@latest/esm/webcomponent.js";
+// client es module
+import { WebComponent } from "https://cdn.jsdelivr.net/npm/@enzoaicardi/webcomponent@latest/esm/client.js";
+// server es module
+import { WebComponent } from "https://cdn.jsdelivr.net/npm/@enzoaicardi/webcomponent@latest/esm/server.js";
 ```
 
 ```html
 <!-- iife function execution -->
-<script src="https://cdn.jsdelivr.net/npm/@enzoaicardi/webcomponent@latest/iife/webcomponent.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@enzoaicardi/webcomponent@latest/iife/client.js"></script>
 <script>
     // global object
-    WebComponent.client;
-    WebComponent.server;
+    WebComponent;
 </script>
 ```

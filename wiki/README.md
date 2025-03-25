@@ -16,10 +16,11 @@ In the example below, you have a button component that must be rendered on the s
 
 ```ts
 // my-component.ts
-import * as WebComponent from "@enzoaicardi/webcomponent";
+import { WebComponent as ClientWebComponent } from "@enzoaicardi/webcomponent/client";
+import { WebComponent as ServerWebComponent } from "@enzoaicardi/webcomponent/server";
 
 // server part
-class server extends WebComponent.server {
+class ButtonServer extends ServerWebComponent {
     static tagName = "my-button";
     content: string;
 
@@ -33,8 +34,9 @@ class server extends WebComponent.server {
 }
 
 // client part
-class client extends WebComponent.client {
+class ButtonClient extends ClientWebComponent {
     static tagName = "my-button";
+
     constructor() {
         super(client);
     }
@@ -47,7 +49,7 @@ class client extends WebComponent.client {
     }
 }
 
-export { client, server };
+export { ButtonClient, ButtonServer };
 ```
 
 ## Explanations
@@ -55,7 +57,7 @@ export { client, server };
 First, let's take a step-by-step look at the properties that the `client` and `server` classes have in common:
 
 -   `static tagName` the component name in the DOM (must contain a “-”)
--   `attrs` an object containing the component's attributes (used during rendering)
+-   `attrs` an object `Map<string, any>` containing the component's attributes (used during rendering)
 -   `render()` the synchronous rendering method
 -   `renderAsync()` the asynchronous rendering method
 -   `toString()` the method for converting an instance into a character string (synchronous or asynchronous)
@@ -80,13 +82,13 @@ But if we assume that you want both server-side rendering and client-side reacti
 
 ```ts
 // client-bundle.ts
-import { client as Button } from "./components/my-component.ts";
+import { ButtonClient as Button } from "./components/my-component.ts";
 Button.define();
 ```
 
 ```ts
 // server-bundle.ts
-import { server as Button } from "./components/my-component.ts";
+import { ButtonServer as Button } from "./components/my-component.ts";
 
 // routing etc...
 app.get("/", (req, res) => {

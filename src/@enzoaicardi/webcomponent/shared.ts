@@ -1,74 +1,79 @@
 import { Symbols } from "./symbols";
-import { ClientWebComponent } from "./client";
-import { ServerWebComponent } from "./server";
 import {
     MissingRenderingMethod,
     MissingTagName,
     UnauthorizedCoercion,
 } from "./errors";
 
-type WebComponent = ClientWebComponent | ServerWebComponent;
+export class WebComponentCore {
+    /** @type {string} The element <tag-name> */
+    public static tagName: string;
 
-export function renderRawComponent<T extends WebComponent>(
-    this: T,
-    raw: string
-): string {
-    const tagName = this[Symbols.definition]["tagName"];
+    /** Element attributes */
+    attrs = new Map<string, any>();
 
-    if (tagName) {
-        const attributes = this.attrs
-            ? Object.entries(this.attrs).reduce(
-                  (acc, [key, value]) =>
-                      acc + (/[^:.\w_-]/.test(key) ? "" : ` ${key}="${value}"`),
-                  ""
-              )
-            : "";
+    /** @internal */
+    [Symbols.definition]: typeof WebComponentCore =
+        Object.getPrototypeOf(this).constructor;
 
-        return `<${tagName}${attributes}>${raw}</${tagName}>`;
-    } else {
-        throw new MissingTagName(this[Symbols.definition]);
+    /**
+     * Method used to define the content of a WebComponent
+     * @returns {string}
+     */
+    render?(): string;
+
+    /**
+     * Method used to define the content of a WebComponent
+     * @returns {Promise<string>}
+     */
+    renderAsync?(): Promise<string>;
+
+    /** @internal */
+    [Symbols.raw](raw: string): string {
+        const tagName = this[Symbols.definition]["tagName"];
+
+        if (tagName) {
+            const attributes = this.attrs
+                ? Object.entries(this.attrs).reduce(
+                      (acc, [key, value]) =>
+                          acc +
+                          (/[^:.\w_-]/.test(key) ? "" : ` ${key}="${value}"`),
+                      ""
+                  )
+                : "";
+
+            return `<${tagName}${attributes}>${raw}</${tagName}>`;
+        } else {
+            throw new MissingTagName(this[Symbols.definition]);
+        }
     }
-}
 
-export function createRawComponent<T extends WebComponent>(
-    this: T
-): T extends Required<Pick<T, "render">>
-    ? string
-    : T extends Required<Pick<T, "renderAsync">>
-    ? Promise<string>
-    : never {
-    // sync -> string
-    if (this.render) {
-        return this[Symbols.raw](this.render()) as T extends Required<
-            Pick<T, "render">
-        >
-            ? string
-            : never;
+    /**
+     * Method used to return the string representation of the WebComponent
+     * @returns {string}
+     */
+    toString(): string | Promise<string> {
+        // sync -> string
+        if (this.render) {
+            return this[Symbols.raw](this.render());
+        }
+        // async -> Promise<string>
+        else if (this.renderAsync) {
+            return this.renderAsync().then((raw) => this[Symbols.raw](raw));
+        } else {
+            throw new MissingRenderingMethod(this[Symbols.definition]);
+        }
     }
-    // async -> Promise<string>
-    else if (this.renderAsync) {
-        return this.renderAsync().then((raw) =>
-            this[Symbols.raw](raw)
-        ) as T extends Required<Pick<T, "render">>
-            ? string
-            : T extends Required<Pick<T, "renderAsync">>
-            ? Promise<string>
-            : never;
-    } else {
-        throw new MissingRenderingMethod(this[Symbols.definition]);
-    }
-}
 
-export function toPrimitiveComponent<T extends WebComponent>(
-    this: T
-): T extends Required<Pick<T, "render">> ? string : never {
-    if (this.render) {
-        return this[Symbols.raw](this.render()) as T extends Required<
-            Pick<T, "render">
-        >
-            ? string
-            : never;
-    } else {
-        throw new UnauthorizedCoercion(this[Symbols.definition]);
+    /**
+     * Method used to return the primitive representation of the WebComponent
+     * @returns {string}
+     */
+    [Symbol.toPrimitive](): string {
+        if (this.render) {
+            return this[Symbols.raw](this.render());
+        } else {
+            throw new UnauthorizedCoercion(this[Symbols.definition]);
+        }
     }
 }

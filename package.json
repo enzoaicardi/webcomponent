@@ -3,7 +3,7 @@
     "scripts": {
         "test": "bun test",
         "dev": "rollup --config rollup.config.js --watch",
-        "build": "bun test && rollup --config rollup.config.js && dts-bundle-generator --project tsconfig.dts.json -o ./dist/index.d.ts src/@enzoaicardi/webcomponent.ts",
+        "build": "bun test && rollup --config rollup.config.js && dts-bundle-generator --project tsconfig.dts.json -o ./dist/client.d.ts src/@enzoaicardi/client.ts && dts-bundle-generator --project tsconfig.dts.json -o ./dist/server.d.ts src/@enzoaicardi/server.ts",
         "tsc": "tsc --project tsconfig.tsc.json"
     },
     "devDependencies": {

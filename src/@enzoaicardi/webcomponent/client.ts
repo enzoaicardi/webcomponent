@@ -1,9 +1,5 @@
 import { MissingTagName } from "./errors";
-import {
-    createRawComponent,
-    renderRawComponent,
-    toPrimitiveComponent,
-} from "./shared";
+import { WebComponentCore } from "./shared";
 import { Symbols } from "./symbols";
 
 type ClientWebComponentConstructor = Required<typeof ClientWebComponent> &
@@ -30,7 +26,9 @@ export class ClientWebComponent extends HTMLElement {
                 customElements.define(definition.tagName, definition);
             }
         } else {
-            throw new MissingTagName(this);
+            throw new MissingTagName(
+                definition as unknown as typeof WebComponentCore
+            );
         }
     }
 
@@ -43,29 +41,34 @@ export class ClientWebComponent extends HTMLElement {
     }
 
     /** @internal */
-    [Symbols.raw] = renderRawComponent;
-
-    /** @internal */
     [Symbols.definition]: typeof ClientWebComponent =
         Object.getPrototypeOf(this).constructor;
+
+    /** @internal */
+    [Symbols.raw] = WebComponentCore.prototype[Symbols.raw];
 
     /** @internal */
     [Symbols.populate](raw: string): void {
         template.innerHTML = raw;
         const fragment = template.content;
-        const attrs = this.attrs;
-        // set component attributes
-        if (attrs) {
-            for (const key in attrs) {
-                this.setAttribute(key, attrs[key]);
-            }
-        }
         // set component childNodes
         this.appendChild(fragment);
     }
 
-    /** @type {Object<string, string> | undefined} The customElement attributes */
-    attrs?: Record<string, string>;
+    /** Element attributes */
+    attrs = new Map<string, any>();
+
+    /**
+     * Method used to define the content of a WebComponent
+     * @returns {string}
+     */
+    render?(): string;
+
+    /**
+     * Method used to define the content of a WebComponent
+     * @returns {Promise<string>}
+     */
+    renderAsync?(): Promise<string>;
 
     /**
      * Native custom element connectedCallback method
@@ -89,26 +92,14 @@ export class ClientWebComponent extends HTMLElement {
     }
 
     /**
-     * Method used to define the content of a WebComponent
-     * @returns {string}
-     */
-    render?(): string;
-
-    /**
-     * Method used to define the content of a WebComponent
-     * @returns {Promise<string>}
-     */
-    renderAsync?(): Promise<string>;
-
-    /**
      * Method used to return the string representation of the WebComponent
      * @returns {string}
      */
-    toString = createRawComponent;
+    toString = WebComponentCore.prototype.toString;
 
     /**
      * Method used to return the primitive representation of the WebComponent
      * @returns {string}
      */
-    [Symbol.toPrimitive] = toPrimitiveComponent;
+    [Symbol.toPrimitive] = WebComponentCore.prototype[Symbol.toPrimitive];
 }

@@ -13,33 +13,56 @@
         "type": "git",
         "url": "https://github.com/enzoaicardi/webcomponent"
     },
-    "main": "./esm/webcomponent.js",
-    "module": "./esm/webcomponent.js",
-    "browser": "./esm/webcomponent.js",
-    "types": "./index.d.ts",
+    "main": "./esm/client.js",
+    "module": "./esm/client.js",
+    "browser": "./esm/client.js",
+    "types": "./client.d.ts",
     "exports": {
-        ".": {
-            "types": "./index.d.ts",
-            "require": "./cjs/webcomponent.cjs",
-            "import": "./esm/webcomponent.js",
-            "browser": "./esm/webcomponent.js",
-            "default": "./esm/webcomponent.js"
+        "./client": {
+            "types": "./client.d.ts",
+            "require": "./cjs/client.cjs",
+            "import": "./esm/client.js",
+            "browser": "./esm/client.js",
+            "default": "./esm/client.js"
         },
-        "./esm": {
-            "types": "./index.d.ts",
-            "default": "./esm/webcomponent.js"
+        "./server": {
+            "types": "./server.d.ts",
+            "require": "./cjs/server.cjs",
+            "import": "./esm/server.js",
+            "browser": "./esm/server.js",
+            "default": "./esm/server.js"
         },
-        "./cjs": {
-            "types": "./index.d.ts",
-            "default": "./cjs/webcomponent.cjs"
+        "./client/esm": {
+            "types": "./client.d.ts",
+            "default": "./esm/client.js"
         },
-        "./umd": {
-            "types": "./index.d.ts",
-            "default": "./umd/webcomponent.js"
+        "./client/cjs": {
+            "types": "./client.d.ts",
+            "default": "./cjs/client.cjs"
         },
-        "./iife": {
-            "types": "./index.d.ts",
-            "default": "./iife/webcomponent.js"
+        "./client/umd": {
+            "types": "./client.d.ts",
+            "default": "./umd/client.js"
+        },
+        "./client/iife": {
+            "types": "./client.d.ts",
+            "default": "./iife/client.js"
+        },
+        "./server/esm": {
+            "types": "./server.d.ts",
+            "default": "./esm/server.js"
+        },
+        "./server/cjs": {
+            "types": "./server.d.ts",
+            "default": "./cjs/server.cjs"
+        },
+        "./server/umd": {
+            "types": "./server.d.ts",
+            "default": "./umd/server.js"
+        },
+        "./server/iife": {
+            "types": "./server.d.ts",
+            "default": "./iife/server.js"
         }
     },
     "keywords": [
