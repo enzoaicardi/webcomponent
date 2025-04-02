@@ -2,7 +2,7 @@
     "compilerOptions": {
         "module": "esnext",
         "target": "esnext",
-        "lib": ["esnext", "dom"],
+        "lib": ["esnext", "dom", "DOM.Iterable"],
         "types": ["node"],
         "declaration": true,
         "emitDeclarationOnly": true,

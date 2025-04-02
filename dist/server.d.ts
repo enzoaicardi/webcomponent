@@ -4,7 +4,7 @@ declare class WebComponentCore {
 	/** @type {string} The element <tag-name> */
 	static tagName: string;
 	/** Element attributes */
-	attrs: Map<string, any>;
+	attributes: ServerNamedNodeMap | NamedNodeMap;
 	/**
 	 * Method used to define the content of a WebComponent
 	 * @returns {string}
@@ -26,8 +26,41 @@ declare class WebComponentCore {
 	 */
 	[Symbol.toPrimitive](): string;
 }
+declare const nodes: unique symbol;
 declare class ServerWebComponent extends WebComponentCore {
+	attributes: ServerNamedNodeMap;
+	classList: ServerClassList;
+	dataset: ServerNamedNodeMap;
+	style: typeof ServerStylePrototype;
+	constructor();
+	setAttribute(qualifiedName: string, value: unknown): void;
+	getAttribute(qualifiedName: string): string;
+	hasAttribute(qualifiedName: string): boolean;
+	removeAttribute(qualifiedName: string): void;
 }
+declare class ServerNamedNodeMap {
+	[nodes]: Record<string, unknown>;
+	[key: string]: unknown;
+	[Symbol.iterator](): Generator<{
+		name: string;
+		value: unknown;
+	}, void, unknown>;
+}
+declare class ServerClassList {
+	[nodes]: Set<string>;
+	constructor(className?: string);
+	add(...tokens: string[]): void;
+	remove(...tokens: string[]): void;
+	toggle(token: string, force?: boolean): void;
+	replace(oldToken: string, newToken: string): void;
+	contains: (value: string) => boolean;
+	[Symbol.toPrimitive](): string;
+}
+declare const ServerStylePrototype: {
+	[key in keyof CSSStyleDeclaration]?: unknown;
+} & {
+	[Symbol.toPrimitive](): string;
+};
 
 export {
 	ServerWebComponent as WebComponent,

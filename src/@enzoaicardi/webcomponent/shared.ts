@@ -4,6 +4,7 @@ import {
     MissingTagName,
     UnauthorizedCoercion,
 } from "./errors";
+import { ServerNamedNodeMap } from "./server";
 
 export class WebComponentCore {
     /** @type {string} The element <tag-name> */
@@ -18,11 +19,14 @@ export class WebComponentCore {
         const tagName = this[Symbols.definition]["tagName"];
 
         if (tagName) {
-            const attributes = Array.from(this.attrs).reduce(
-                (acc, [key, value]) =>
-                    acc + (/[^:.\w_-]/.test(key) ? "" : ` ${key}="${value}"`),
-                ""
-            );
+            let attributes = "";
+            for (const { name, value } of this.attributes) {
+                if (value + "" !== "") {
+                    attributes += /[^:.\w_-]/.test(name)
+                        ? ""
+                        : ` ${name}="${value}"`;
+                }
+            }
             return `<${tagName}${attributes}>${raw}</${tagName}>`;
         } else {
             throw new MissingTagName(this[Symbols.definition]);
@@ -30,7 +34,7 @@ export class WebComponentCore {
     }
 
     /** Element attributes */
-    attrs = new Map<string, any>();
+    attributes: ServerNamedNodeMap | NamedNodeMap;
 
     /**
      * Method used to define the content of a WebComponent

@@ -33,7 +33,7 @@ export default formats
                                 reserved: [
                                     "tagName",
                                     "define",
-                                    "attrs",
+                                    "class",
                                     "connectedCallback",
                                     "render",
                                     "renderAsync",

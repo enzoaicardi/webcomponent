@@ -13,8 +13,6 @@ declare class ClientWebComponent extends HTMLElement {
 	 * Constructor method used to create a ClientWebComponent instance
 	 */
 	constructor(definition: ClientWebComponentConstructor);
-	/** Element attributes */
-	attrs: Map<string, any>;
 	/**
 	 * Method used to define the content of a WebComponent
 	 * @returns {string}

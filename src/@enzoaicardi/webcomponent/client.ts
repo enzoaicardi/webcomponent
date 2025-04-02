@@ -2,14 +2,13 @@ import { MissingTagName } from "./errors";
 import { WebComponentCore } from "./shared";
 import { Symbols } from "./symbols";
 
-type ClientWebComponentConstructor = Required<typeof ClientWebComponent> &
+export type ClientWebComponentConstructor = Required<
+    typeof ClientWebComponent
+> &
     CustomElementConstructor;
 
 /** @internal */
 const template = document.createElement("template");
-
-/** @internal */
-const registry = new Set<ClientWebComponentConstructor>();
 
 export class ClientWebComponent extends HTMLElement {
     /** @type {string} The element <tag-name> */
@@ -21,8 +20,7 @@ export class ClientWebComponent extends HTMLElement {
      */
     public static define(definition: ClientWebComponentConstructor = this) {
         if (definition.tagName) {
-            if (!registry.has(definition)) {
-                registry.add(definition);
+            if (!customElements.get(definition.tagName)) {
                 customElements.define(definition.tagName, definition);
             }
         } else {
@@ -54,9 +52,6 @@ export class ClientWebComponent extends HTMLElement {
         // set component childNodes
         this.appendChild(fragment);
     }
-
-    /** Element attributes */
-    attrs = new Map<string, any>();
 
     /**
      * Method used to define the content of a WebComponent
