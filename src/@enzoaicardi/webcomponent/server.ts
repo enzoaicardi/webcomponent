@@ -122,21 +122,7 @@ function ServerCSSStyleDeclaration(cssRules?: string) {
     }
 }
 
-const ServerCSSStyleDeclarationPrototype: ServerCSSStyleDeclaration = {
-    parentRule: null,
-
-    get length(): number {
-        return Object.keys(this).length;
-    },
-
-    get cssText(): string {
-        return this[Symbol.toPrimitive]();
-    },
-
-    removeProperty(property: string): void {
-        delete this[toCamelCase(property)];
-    },
-
+const ServerCSSStyleDeclarationPrototype = {
     [Symbol.toPrimitive](): string {
         let style = "";
         for (const key in this) {
@@ -146,4 +132,29 @@ const ServerCSSStyleDeclarationPrototype: ServerCSSStyleDeclaration = {
     },
 };
 
-ServerCSSStyleDeclaration.prototype = ServerCSSStyleDeclarationPrototype;
+Object.defineProperties(ServerCSSStyleDeclarationPrototype, {
+    parentRule: {
+        value: null,
+    },
+
+    length: {
+        get(): number {
+            return Object.keys(this).length;
+        },
+    },
+
+    cssText: {
+        get(): string {
+            return this[Symbol.toPrimitive]();
+        },
+    },
+
+    removeProperty: {
+        value(property: string): void {
+            delete this[toCamelCase(property)];
+        },
+    },
+});
+
+ServerCSSStyleDeclaration.prototype =
+    ServerCSSStyleDeclarationPrototype as ServerCSSStyleDeclaration;
