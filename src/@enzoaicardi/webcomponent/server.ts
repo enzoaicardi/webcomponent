@@ -1,5 +1,4 @@
 import { toCamelCase, toKebabCase, WebComponentCore } from "./shared";
-import { Symbols } from "./symbols";
 
 export class ServerWebComponent extends WebComponentCore {
     attributes: ServerNamedNodeMap = new ServerNamedNodeMap();
@@ -8,8 +7,8 @@ export class ServerWebComponent extends WebComponentCore {
 
     constructor() {
         super();
-        this.attributes[Symbols.nodes].class = this.classList;
-        this.attributes[Symbols.nodes].style = this.style;
+        this.attributes.class = this.classList;
+        this.attributes.style = this.style;
     }
 
     setAttribute(qualifiedName: string, value: unknown): void {
@@ -21,29 +20,32 @@ export class ServerWebComponent extends WebComponentCore {
             this.style = value as ServerCSSStyleDeclaration;
         }
 
-        this.attributes[Symbols.nodes][qualifiedName] = value;
+        this.attributes[qualifiedName] = value;
     }
 
     getAttribute(qualifiedName: string): string {
-        return this.attributes[Symbols.nodes][qualifiedName] + "";
+        return this.attributes[qualifiedName] + "";
     }
 
     hasAttribute(qualifiedName: string): boolean {
-        return !!this.attributes[Symbols.nodes][qualifiedName];
+        return !!this.attributes[qualifiedName];
     }
 
     removeAttribute(qualifiedName: string): void {
-        delete this.attributes[Symbols.nodes][qualifiedName];
+        delete this.attributes[qualifiedName];
     }
 }
 
-export class ServerNamedNodeMap {
-    /** @internal */
-    [Symbols.nodes]: Record<string, unknown> = {};
+export class ServerNamedNodeMap implements Record<string, unknown> {
+    [key: string]: unknown;
 
-    *[Symbol.iterator]() {
-        for (const key in this[Symbols.nodes]) {
-            yield { name: key, value: this[Symbols.nodes][key] };
+    *[Symbol.iterator](): Generator<
+        { name: string; value: unknown },
+        void,
+        unknown
+    > {
+        for (const key in this) {
+            yield { name: key, value: this[key] };
         }
     }
 }

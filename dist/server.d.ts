@@ -36,7 +36,8 @@ declare class ServerWebComponent extends WebComponentCore {
 	hasAttribute(qualifiedName: string): boolean;
 	removeAttribute(qualifiedName: string): void;
 }
-declare class ServerNamedNodeMap {
+declare class ServerNamedNodeMap implements Record<string, unknown> {
+	[key: string]: unknown;
 	[Symbol.iterator](): Generator<{
 		name: string;
 		value: unknown;
