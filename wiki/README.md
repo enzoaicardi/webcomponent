@@ -58,6 +58,9 @@ First, let's take a step-by-step look at the properties that the `client` and `s
 
 -   `static tagName` the component name in the DOM (must contain a “-”)
 -   `attributes` an object `NamedNodeMap | ServerNamedNodeMap` containing the component's attributes (used during rendering)
+-   `(get|set|has)Attribute()` the methods to manipulate component's attributes
+-   `classList` an object `DOMTokenList | ServerDOMTokenList` used to manipulate class attribute
+-   `style` an object `CSSStyleDeclaration | ServerCSSStyleDeclaration` used to manipulate style attribute
 -   `render()` the synchronous rendering method
 -   `renderAsync()` the asynchronous rendering method
 -   `toString()` the method for converting an instance into a character string (synchronous or asynchronous)

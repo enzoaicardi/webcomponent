@@ -1,111 +1,142 @@
-import { WebComponentCore } from "./shared";
-
-const nodes = Symbol();
-
-const toKebabCase = (string: string) =>
-    string.replace(/([A-Z])/g, "-$1").toLowerCase();
+import { toCamelCase, toKebabCase, WebComponentCore } from "./shared";
+import { Symbols } from "./symbols";
 
 export class ServerWebComponent extends WebComponentCore {
-    attributes = new ServerNamedNodeMap();
-    classList = new ServerClassList();
-    dataset = new Proxy<ServerNamedNodeMap>(this.attributes, ServerDataSet);
-    style: typeof ServerStylePrototype = new ServerStyle();
+    attributes: ServerNamedNodeMap = new ServerNamedNodeMap();
+    classList: ServerDOMTokenList = new ServerDOMTokenList();
+    style: ServerCSSStyleDeclaration = new ServerCSSStyleDeclaration();
 
     constructor() {
         super();
-        this.attributes[nodes].class = this.classList;
-        this.attributes[nodes].style = this.style;
+        this.attributes[Symbols.nodes].class = this.classList;
+        this.attributes[Symbols.nodes].style = this.style;
     }
 
     setAttribute(qualifiedName: string, value: unknown): void {
         if (qualifiedName === "class") {
-            value = new ServerClassList(value as string);
-            this.classList = value as ServerClassList;
+            value = new ServerDOMTokenList(value as string);
+            this.classList = value as ServerDOMTokenList;
         } else if (qualifiedName === "style") {
-            value = new ServerStyle(value as string);
-            this.style = value as typeof ServerStylePrototype;
+            value = new ServerCSSStyleDeclaration(value as string);
+            this.style = value as ServerCSSStyleDeclaration;
         }
 
-        this.attributes[nodes][qualifiedName] = value;
+        this.attributes[Symbols.nodes][qualifiedName] = value;
     }
 
     getAttribute(qualifiedName: string): string {
-        return this.attributes[nodes][qualifiedName] + "";
+        return this.attributes[Symbols.nodes][qualifiedName] + "";
     }
 
     hasAttribute(qualifiedName: string): boolean {
-        return !!this.attributes[nodes][qualifiedName];
+        return !!this.attributes[Symbols.nodes][qualifiedName];
     }
 
     removeAttribute(qualifiedName: string): void {
-        delete this.attributes[nodes][qualifiedName];
+        delete this.attributes[Symbols.nodes][qualifiedName];
     }
 }
 
 export class ServerNamedNodeMap {
-    [nodes]: Record<string, unknown> = {};
-    [key: string]: unknown;
+    /** @internal */
+    [Symbols.nodes]: Record<string, unknown> = {};
 
     *[Symbol.iterator]() {
-        for (const key in this[nodes]) {
-            yield { name: key, value: this[nodes][key] };
+        for (const key in this[Symbols.nodes]) {
+            yield { name: key, value: this[Symbols.nodes][key] };
         }
     }
 }
 
-export class ServerClassList {
-    [nodes] = new Set<string>();
-
+class ServerDOMTokenList extends Set<string> {
     constructor(className?: string) {
-        if (className) {
-            this.add(...className.split(" "));
-        }
+        super(className?.split(" "));
     }
 
+    /** @ts-ignore */
     add(...tokens: string[]): void {
-        tokens.forEach((token) => this[nodes].add(token));
+        tokens.forEach((token) => super.add(token));
     }
 
     remove(...tokens: string[]): void {
-        tokens.forEach((token) => this[nodes].delete(token));
+        tokens.forEach((token) => this.delete(token));
     }
 
-    toggle(token: string, force?: boolean): void {
-        const exist = force != null ? force : this[nodes].has(token);
-        this[nodes][exist ? "delete" : "add"](token);
+    toggle(token: string, force?: boolean): boolean {
+        const exist = force != null ? !force : this.has(token);
+        this[exist ? "delete" : "add"](token);
+        return !exist;
     }
 
     replace(oldToken: string, newToken: string) {
-        if (this[nodes].has(oldToken)) {
-            this[nodes].delete(oldToken);
-            this[nodes].add(newToken);
+        if (this.has(oldToken)) {
+            this.delete(oldToken);
+            this.add(newToken);
         }
     }
 
-    contains = this[nodes].has;
+    item(token: string): number {
+        return [...this].indexOf(token);
+    }
+
+    contains = this.has;
+
+    get length(): number {
+        return this.size;
+    }
+
+    get value(): string {
+        return this[Symbol.toPrimitive]();
+    }
 
     [Symbol.toPrimitive](): string {
-        return Array.from(this[nodes]).join(" ");
+        return Array.from(this).join(" ");
     }
 }
 
-export function ServerStyle(cssRules?: string) {
+type ServerCSSStyleDeclaration = {
+    [key in keyof Omit<
+        CSSStyleDeclaration,
+        | "setProperty"
+        | "getPropertyCSSValue"
+        | "getPropertyPriority"
+        | "getPropertyValue"
+        | "item"
+    >]?: unknown;
+} & {
+    length: number;
+    cssText: string;
+    parentRule: null;
+    removeProperty(property: string): void;
+    [Symbol.toPrimitive](): string;
+};
+
+function ServerCSSStyleDeclaration(cssRules?: string) {
     if (cssRules) {
         cssRules
             .split(";")
             .map((rule) => rule.split(":"))
             .forEach(([rule, value]) => {
-                value &&
-                    (this[
-                        rule.replace(/-([a-z])/g, (_, $1) => $1.toUpperCase())
-                    ] = value);
+                value && (this[toCamelCase(rule)] = value);
             });
     }
 }
 
-const ServerStylePrototype: { [key in keyof CSSStyleDeclaration]?: unknown } & {
-    [Symbol.toPrimitive](): string;
-} = {
+const ServerCSSStyleDeclarationPrototype: ServerCSSStyleDeclaration = {
+    parentRule: null,
+
+    get length(): number {
+        return Object.keys(this).length;
+    },
+
+    get cssText(): string {
+        return this[Symbol.toPrimitive]();
+    },
+
+    removeProperty(property: string): void {
+        delete this[toCamelCase(property)];
+    },
+
     [Symbol.toPrimitive](): string {
         let style = "";
         for (const key in this) {
@@ -115,21 +146,4 @@ const ServerStylePrototype: { [key in keyof CSSStyleDeclaration]?: unknown } & {
     },
 };
 
-ServerStyle.prototype = ServerStylePrototype;
-
-export class ServerDataSet {
-    static get(attributes: ServerNamedNodeMap, property: string): unknown {
-        const name = toKebabCase(property);
-        return attributes[nodes]["data-" + name];
-    }
-
-    static set(
-        attributes: ServerNamedNodeMap,
-        property: string,
-        value: unknown
-    ): boolean {
-        const name = toKebabCase(property);
-        attributes[nodes]["data-" + name] = value;
-        return true;
-    }
-}
+ServerCSSStyleDeclaration.prototype = ServerCSSStyleDeclarationPrototype;

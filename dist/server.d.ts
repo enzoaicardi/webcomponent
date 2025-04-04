@@ -26,12 +26,10 @@ declare class WebComponentCore {
 	 */
 	[Symbol.toPrimitive](): string;
 }
-declare const nodes: unique symbol;
 declare class ServerWebComponent extends WebComponentCore {
 	attributes: ServerNamedNodeMap;
-	classList: ServerClassList;
-	dataset: ServerNamedNodeMap;
-	style: typeof ServerStylePrototype;
+	classList: ServerDOMTokenList;
+	style: ServerCSSStyleDeclaration;
 	constructor();
 	setAttribute(qualifiedName: string, value: unknown): void;
 	getAttribute(qualifiedName: string): string;
@@ -39,28 +37,37 @@ declare class ServerWebComponent extends WebComponentCore {
 	removeAttribute(qualifiedName: string): void;
 }
 declare class ServerNamedNodeMap {
-	[nodes]: Record<string, unknown>;
-	[key: string]: unknown;
 	[Symbol.iterator](): Generator<{
 		name: string;
 		value: unknown;
 	}, void, unknown>;
 }
-declare class ServerClassList {
-	[nodes]: Set<string>;
+declare class ServerDOMTokenList extends Set<string> {
 	constructor(className?: string);
+	/** @ts-ignore */
 	add(...tokens: string[]): void;
 	remove(...tokens: string[]): void;
-	toggle(token: string, force?: boolean): void;
+	toggle(token: string, force?: boolean): boolean;
 	replace(oldToken: string, newToken: string): void;
+	item(token: string): number;
 	contains: (value: string) => boolean;
+	get length(): number;
+	get value(): string;
 	[Symbol.toPrimitive](): string;
 }
-declare const ServerStylePrototype: {
-	[key in keyof CSSStyleDeclaration]?: unknown;
+export type ServerCSSStyleDeclaration = {
+	[key in keyof Omit<CSSStyleDeclaration, "setProperty" | "getPropertyCSSValue" | "getPropertyPriority" | "getPropertyValue" | "item">]?: unknown;
 } & {
+	length: number;
+	cssText: string;
+	parentRule: null;
+	removeProperty(property: string): void;
 	[Symbol.toPrimitive](): string;
 };
+declare function ServerCSSStyleDeclaration(cssRules?: string): void;
+declare namespace ServerCSSStyleDeclaration {
+	var prototype: ServerCSSStyleDeclaration;
+}
 
 export {
 	ServerWebComponent as WebComponent,
