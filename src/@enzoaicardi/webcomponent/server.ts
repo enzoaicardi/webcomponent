@@ -1,8 +1,25 @@
 import { toCamelCase, toKebabCase, WebComponentCore } from "./shared";
 
 export class ServerWebComponent extends WebComponentCore {
+    /**
+     * The ServerNamedNodeMap interface represents a collection of
+     * attributes
+     */
     attributes: ServerNamedNodeMap = new ServerNamedNodeMap();
+
+    /**
+     * Allows for manipulation of element's class content attribute
+     * as a set of whitespace-separated tokens through a
+     * ServerDOMTokenList object.
+     */
     classList: ServerDOMTokenList = new ServerDOMTokenList();
+
+    /**
+     * The read-only style property of the HTMLElement returns
+     * the inline style of an element in the form of a live
+     * ServerCSSStyleDeclaration object that contains a list
+     * of all styles properties
+     */
     style: ServerCSSStyleDeclaration = new ServerCSSStyleDeclaration();
 
     constructor() {
@@ -11,6 +28,10 @@ export class ServerWebComponent extends WebComponentCore {
         this.attributes.style = this.style;
     }
 
+    /**
+     * Sets the value of element's first attribute whose qualified
+     * name is qualifiedName to value.
+     */
     setAttribute(qualifiedName: string, value: unknown): void {
         if (qualifiedName === "class") {
             value = new ServerDOMTokenList(value as string);
@@ -23,14 +44,26 @@ export class ServerWebComponent extends WebComponentCore {
         this.attributes[qualifiedName] = value;
     }
 
-    getAttribute(qualifiedName: string): string {
-        return this.attributes[qualifiedName] + "";
+    /**
+     * Returns element's first attribute whose qualified name is
+     * qualifiedName, and null if there is no such attribute otherwise.
+     */
+    getAttribute(qualifiedName: string): string | null {
+        return this.attributes[qualifiedName] + "" || null;
     }
 
+    /**
+     * Returns true if element has an attribute whose qualified
+     * name is qualifiedName, and false otherwise.
+     */
     hasAttribute(qualifiedName: string): boolean {
         return !!this.attributes[qualifiedName];
     }
 
+    /**
+     * Removes element's first attribute whose qualified name
+     * is qualifiedName.
+     */
     removeAttribute(qualifiedName: string): void {
         delete this.attributes[qualifiedName];
     }

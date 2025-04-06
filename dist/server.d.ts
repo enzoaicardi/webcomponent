@@ -27,13 +27,44 @@ declare class WebComponentCore {
 	[Symbol.toPrimitive](): string;
 }
 declare class ServerWebComponent extends WebComponentCore {
+	/**
+	 * The ServerNamedNodeMap interface represents a collection of
+	 * attributes
+	 */
 	attributes: ServerNamedNodeMap;
+	/**
+	 * Allows for manipulation of element's class content attribute
+	 * as a set of whitespace-separated tokens through a
+	 * ServerDOMTokenList object.
+	 */
 	classList: ServerDOMTokenList;
+	/**
+	 * The read-only style property of the HTMLElement returns
+	 * the inline style of an element in the form of a live
+	 * ServerCSSStyleDeclaration object that contains a list
+	 * of all styles properties
+	 */
 	style: ServerCSSStyleDeclaration;
 	constructor();
+	/**
+	 * Sets the value of element's first attribute whose qualified
+	 * name is qualifiedName to value.
+	 */
 	setAttribute(qualifiedName: string, value: unknown): void;
-	getAttribute(qualifiedName: string): string;
+	/**
+	 * Returns element's first attribute whose qualified name is
+	 * qualifiedName, and null if there is no such attribute otherwise.
+	 */
+	getAttribute(qualifiedName: string): string | null;
+	/**
+	 * Returns true if element has an attribute whose qualified
+	 * name is qualifiedName, and false otherwise.
+	 */
 	hasAttribute(qualifiedName: string): boolean;
+	/**
+	 * Removes element's first attribute whose qualified name
+	 * is qualifiedName.
+	 */
 	removeAttribute(qualifiedName: string): void;
 }
 declare class ServerNamedNodeMap implements Record<string, unknown> {

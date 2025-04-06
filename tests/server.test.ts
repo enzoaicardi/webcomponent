@@ -8,10 +8,26 @@ class TestSyncComponent extends WebComponent {
     }
 }
 
+class TestAsyncComponent extends WebComponent {
+    static tagName: string = "test-async-component";
+    async renderAsync() {
+        await Promise.resolve();
+        return `<p>TestSyncComponent</p>`;
+    }
+}
+
 test("server: render", () => {
     expect(TestSyncComponent.tagName).toBe("test-sync-component");
     expect(new TestSyncComponent().toString()).toBe(
         "<test-sync-component><p>TestSyncComponent</p></test-sync-component>"
+    );
+});
+
+test("server: renderAsync", async () => {
+    const component = new TestAsyncComponent();
+    const html = await component.toString();
+    expect(html).toBe(
+        `<test-async-component><p>TestSyncComponent</p></test-async-component>`
     );
 });
 
@@ -57,5 +73,32 @@ test("server: classList", () => {
     );
 });
 
-// TODO attributes, data-attributes
-// add jsdoc for server polyfills
+test("server: classList & attributes", () => {
+    const component = new TestSyncComponent();
+    component.setAttribute("class", "my-class");
+    component.classList.add("my-class");
+    component.classList.add("other-class");
+    component.classList.remove("my-class");
+    expect(component.toString()).toBe(
+        `<test-sync-component class="other-class"><p>TestSyncComponent</p></test-sync-component>`
+    );
+});
+
+test("server: style & attributes", () => {
+    const component = new TestSyncComponent();
+    component.setAttribute("style", "background-color:red;text-align:center;");
+    component.style.backgroundColor = "blue";
+    delete component.style.textAlign;
+    expect(component.toString()).toBe(
+        `<test-sync-component style="background-color:blue;"><p>TestSyncComponent</p></test-sync-component>`
+    );
+});
+
+test("server: attributes", () => {
+    const component = new TestSyncComponent();
+    component.setAttribute("data-name", "my-component");
+    expect(component.getAttribute("data-name")).toBe("my-component");
+    expect(component.hasAttribute("data-name")).toBe(true);
+    component.removeAttribute("data-name");
+    expect(component.hasAttribute("data-name")).toBe(false);
+});
