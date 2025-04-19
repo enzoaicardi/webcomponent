@@ -1,6 +1,7 @@
-import { toCamelCase, toKebabCase, WebComponentCore } from "./shared";
+import { WebComponentCore } from "./core";
+import { toCamelCase, toKebabCase } from "./utils/keys";
 
-export class ServerWebComponent extends WebComponentCore {
+export class ServerWebComponent extends WebComponentCore() {
     /**
      * The ServerNamedNodeMap interface represents a collection of
      * attributes
