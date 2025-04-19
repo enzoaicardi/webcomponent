@@ -8,9 +8,6 @@ export class ClientWebComponent extends WebComponentCore(HTMLElementInterface) {
     /** @type {string} The element <tag-name> */
     public static tagName: string;
 
-    /** Element attributes */
-    attributes: NamedNodeMap;
-
     /**
      * Native custom element connectedCallback method
      * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements|MDN}

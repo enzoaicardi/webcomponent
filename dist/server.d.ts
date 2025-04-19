@@ -2,15 +2,17 @@
 
 declare const ServerWebComponent_base: {
 	new (...args: any[]): {
-		attributes: ServerNamedNodeMap | NamedNodeMap;
 		definition: any;
 		render?(): string;
 		renderAsync?(): Promise<string>;
 		toString(): string | Promise<string>;
 		[Symbol.toPrimitive](): string;
+		attributes: NamedNodeMap | ServerNamedNodeMap;
 	};
 	tagName: string;
-} & (new (...args: any[]) => {});
+} & (new (...args: any[]) => {
+	attributes: NamedNodeMap | ServerNamedNodeMap;
+});
 declare class ServerWebComponent extends ServerWebComponent_base {
 	/**
 	 * The ServerNamedNodeMap interface represents a collection of

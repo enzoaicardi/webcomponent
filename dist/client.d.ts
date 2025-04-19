@@ -13,20 +13,18 @@ export interface HTMLElementInterfaceConstructor {
 }
 declare const ClientWebComponent_base: {
 	new (...args: any[]): {
-		attributes: ServerNamedNodeMap | NamedNodeMap;
 		definition: any;
 		render?(): string;
 		renderAsync?(): Promise<string>;
 		toString(): string | Promise<string>;
 		[Symbol.toPrimitive](): string;
+		attributes: NamedNodeMap | ServerNamedNodeMap;
 	};
 	tagName: string;
 } & HTMLElementInterfaceConstructor;
 declare class ClientWebComponent extends ClientWebComponent_base {
 	/** @type {string} The element <tag-name> */
 	static tagName: string;
-	/** Element attributes */
-	attributes: NamedNodeMap;
 	/**
 	 * Native custom element connectedCallback method
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements|MDN}

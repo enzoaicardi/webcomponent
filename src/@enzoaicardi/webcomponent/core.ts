@@ -6,19 +6,18 @@ import {
 } from "./utils/errors";
 
 /**
- *
+ * Mixin used to dynamically create a WebComponent class with shared methods
  * @param baseClass
- * @returns
  */
-export function WebComponentCore<Class extends new (...args: any[]) => {}>(
-    baseClass: Class = class {} as Class
-) {
+export function WebComponentCore<
+    Class extends new (...args: any[]) => {
+        /** customElement attributes */
+        attributes: NamedNodeMap | ServerNamedNodeMap;
+    }
+>(baseClass: Class = class {} as Class) {
     return class extends baseClass {
         /** @type {string} The element <tag-name> */
         public static tagName: string;
-
-        /** Element attributes */
-        attributes: ServerNamedNodeMap | NamedNodeMap;
 
         /** customElement class */
         definition = Object.getPrototypeOf(this).constructor;
