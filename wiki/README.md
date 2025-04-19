@@ -37,10 +37,6 @@ class ButtonServer extends ServerWebComponent {
 class ButtonClient extends ClientWebComponent {
     static tagName = "my-button";
 
-    constructor() {
-        super(client);
-    }
-
     connectedCallback() {
         /* in case of client-side rendering */
         super.connectedCallback();
@@ -58,6 +54,7 @@ First, let's take a step-by-step look at the properties that the `client` and `s
 
 -   `static tagName` the component name in the DOM (must contain a “-”)
 -   `attributes` an object `NamedNodeMap | ServerNamedNodeMap` containing the component's attributes (used during rendering)
+-   `definition` the customElement class
 -   `(get|set|has)Attribute()` the methods to manipulate component's attributes
 -   `classList` an object `DOMTokenList | ServerDOMTokenList` used to manipulate class attribute
 -   `style` an object `CSSStyleDeclaration | ServerCSSStyleDeclaration` used to manipulate style attribute
